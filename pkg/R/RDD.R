@@ -1249,12 +1249,12 @@ setMethod("flatMapValues",
 
 #' Partition an RDD by key
 #'
-#' This function operates on RDDs where every element is of the form list(K, V).
+#' This function operates on RDDs where every element is of the form list(K, V) or c(K, V).
 #' For each element of this RDD, the partitioner is used to compute a hash
 #' function and the RDD is partitioned using this hash value.
 #'
 #' @param rdd The RDD to partition. Should be an RDD where each element is
-#'             list(K, V).
+#'             list(K, V) or c(K, V).
 #' @param numPartitions Number of partitions to create.
 #' @param ... Other optional arguments to partitionBy.
 #'
@@ -1266,10 +1266,10 @@ setMethod("flatMapValues",
 #' @examples
 #'\dontrun{
 #' sc <- sparkR.init()
-#' pairs <- list(c(1, 2), c(1.1, 3), c(1, 4))
+#' pairs <- list(list(1, 2), list(1.1, 3), list(1, 4))
 #' rdd <- parallelize(sc, pairs)
 #' parts <- partitionBy(rdd, 2L)
-#' collectPartition(parts, 0L) # First partition should contain c(1,2) and c(1,3)
+#' collectPartition(parts, 0L) # First partition should contain list(1, 2) and list(1, 4)
 #'}
 setGeneric("partitionBy",
            function(rdd, numPartitions, ...) {
@@ -1334,11 +1334,11 @@ setMethod("partitionBy",
 
 #' Group values by key
 #'
-#' This function operates on RDDs where every element is of the form list(K, V).
+#' This function operates on RDDs where every element is of the form list(K, V) or c(K, V).
 #' and group values for each key in the RDD into a single sequence.
 #'
 #' @param rdd The RDD to group. Should be an RDD where each element is
-#'             list(K, V).
+#'             list(K, V) or c(K, V).
 #' @param numPartitions Number of partitions to create.
 #' @return An RDD where each element is list(K, list(V))
 #' @seealso reduceByKey
@@ -1347,7 +1347,7 @@ setMethod("partitionBy",
 #' @examples
 #'\dontrun{
 #' sc <- sparkR.init()
-#' pairs <- list(c(1, 2), c(1.1, 3), c(1, 4))
+#' pairs <- list(list(1, 2), list(1.1, 3), list(1, 4))
 #' rdd <- parallelize(sc, pairs)
 #' parts <- groupByKey(rdd, 2L)
 #' grouped <- collect(parts)
@@ -1393,11 +1393,11 @@ setMethod("groupByKey",
 
 #' Merge values by key
 #'
-#' This function operates on RDDs where every element is of the form list(K, V).
+#' This function operates on RDDs where every element is of the form list(K, V) or c(K, V).
 #' and merges the values for each key using an associative reduce function.
 #'
 #' @param rdd The RDD to reduce by key. Should be an RDD where each element is
-#'             list(K, V).
+#'             list(K, V) or c(K, V).
 #' @param combineFunc The associative reduce function to use.
 #' @param numPartitions Number of partitions to create.
 #' @return An RDD where each element is list(K, V') where V' is the merged
@@ -1408,7 +1408,7 @@ setMethod("groupByKey",
 #' @examples
 #'\dontrun{
 #' sc <- sparkR.init()
-#' pairs <- list(c(1, 2), c(1.1, 3), c(1, 4))
+#' pairs <- list(list(1, 2), list(1.1, 3), list(1, 4))
 #' rdd <- parallelize(sc, pairs)
 #' parts <- reduceByKey(rdd, "+", 2L)
 #' reduced <- collect(parts)
@@ -1465,7 +1465,7 @@ setMethod("reduceByKey",
 #' }
 #'
 #' @param rdd The RDD to combine. Should be an RDD where each element is
-#'             list(K, V).
+#'             list(K, V) or c(K, V).
 #' @param createCombiner Create a combiner (C) given a value (V)
 #' @param mergeValue Merge the given value (V) with an existing combiner (C)
 #' @param mergeCombiners Merge two combiners and return a new combiner
@@ -1478,7 +1478,7 @@ setMethod("reduceByKey",
 #' @examples
 #'\dontrun{
 #' sc <- sparkR.init()
-#' pairs <- list(c(1, 2), c(1.1, 3), c(1, 4))
+#' pairs <- list(list(1, 2), list(1.1, 3), list(1, 4))
 #' rdd <- parallelize(sc, pairs)
 #' parts <- combineByKey(rdd, function(x) { x }, "+", "+", 2L)
 #' combined <- collect(parts)
