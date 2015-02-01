@@ -11,7 +11,7 @@ reduceByKey(rdd, combineFunc, numPartitions)
 }
 \arguments{
   \item{rdd}{The RDD to reduce by key. Should be an RDD
-  where each element is list(K, V).}
+  where each element is list(K, V) or c(K, V).}
 
   \item{combineFunc}{The associative reduce function to
   use.}
@@ -24,13 +24,13 @@ merged value
 }
 \description{
 This function operates on RDDs where every element is of
-the form list(K, V). and merges the values for each key
+the form list(K, V) or c(K, V). and merges the values for each key
 using an associative reduce function.
 }
 \examples{
 \dontrun{
 sc <- sparkR.init()
-pairs <- list(c(1, 2), c(1.1, 3), c(1, 4))
+pairs <- list(list(1, 2), list(1.1, 3), list(1, 4))
 rdd <- parallelize(sc, pairs)
 parts <- reduceByKey(rdd, "+", 2L)
 reduced <- collect(parts)

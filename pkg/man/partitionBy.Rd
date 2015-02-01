@@ -11,7 +11,7 @@ partitionBy(rdd, numPartitions, ...)
 }
 \arguments{
   \item{rdd}{The RDD to partition. Should be an RDD where
-  each element is list(K, V).}
+  each element is list(K, V) or c(K, V).}
 
   \item{numPartitions}{Number of partitions to create.}
 
@@ -25,17 +25,17 @@ An RDD partitioned using the specified partitioner.
 }
 \description{
 This function operates on RDDs where every element is of
-the form list(K, V). For each element of this RDD, the
+the form list(K, V) or c(K, V). For each element of this RDD, the
 partitioner is used to compute a hash function and the RDD
 is partitioned using this hash value.
 }
 \examples{
 \dontrun{
 sc <- sparkR.init()
-pairs <- list(c(1, 2), c(1.1, 3), c(1, 4))
+pairs <- list(list(1, 2), list(1.1, 3), list(1, 4))
 rdd <- parallelize(sc, pairs)
 parts <- partitionBy(rdd, 2L)
-collectPartition(parts, 0L) # First partition should contain c(1,2) and c(1,3)
+collectPartition(parts, 0L) # First partition should contain c(1,2) and c(1,4)
 }
 }
 

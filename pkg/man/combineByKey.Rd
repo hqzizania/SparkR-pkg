@@ -11,7 +11,7 @@ combineByKey(rdd, createCombiner, mergeValue, mergeCombiners, numPartitions)
 }
 \arguments{
   \item{rdd}{The RDD to combine. Should be an RDD where
-  each element is list(K, V).}
+  each element is list(K, V) or c(K, V).}
 
   \item{createCombiner}{Create a combiner (C) given a value
   (V)}
@@ -44,7 +44,7 @@ concatentates two lists). }
 \examples{
 \dontrun{
 sc <- sparkR.init()
-pairs <- list(c(1, 2), c(1.1, 3), c(1, 4))
+pairs <- list(list(1, 2), list(1.1, 3), list(1, 4))
 rdd <- parallelize(sc, pairs)
 parts <- combineByKey(rdd, function(x) { x }, "+", "+", 2L)
 combined <- collect(parts)
