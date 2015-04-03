@@ -42,6 +42,7 @@ exportMethods(
               "mapPartitionsWithIndex",
               "mapValues",
               "maximum",
+              "meanStats",
               "minimum",
               "numPartitions",
               "partitionBy",
