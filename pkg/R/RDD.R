@@ -652,20 +652,29 @@ setMethod("minimum",
 setMethod("meanStats",
           signature(x = "RDD"),
           function(x) {
-            meanFunc <- function(x, y) {
-              delta <- y[1] - x[1] 
-
-              if (y[2] * 10 < x[2]) 
-                  x[1] <- x[1] + (delta * y[2]) / (x[2] + y[2])
-              else if (x[2] * 10 < y[2]) 
-                  x[1] <- y[1] - (delta * x[2]) / (x[2] + y[2])
-              else
-                  x[1] <- (x[1] * x[2] + y[1] * y[2]) / (x[2] + y[2])
-
-              c(x[1], x[2] + y[2])
-            }
+            # build a new RDD which's elements are StatCounters c(mean, count)
             newRdd <- lapply(x, function(x) { c(x, 1) })
-            reduce(newRdd, meanFunc)[1]
+            reduce(newRdd, mergeStats)[1]
+          })
+
+#' Get the variance of the values of an RDD's elements.
+#'
+#' @param x The RDD to get the variance of the values of elements from
+#' @examples
+#'\dontrun{
+#' sc <- sparkR.init()
+#' rdd <- parallelize(sc, 1:3)
+#' variance(rdd) # 0.6666667
+#'}
+#' @rdname variance 
+#' @aliases variance,RDD
+setMethod("variance",
+          signature(x = "RDD"),
+          function(x) {
+            # build a new RDD which's elements are StatCounters c(mean, count, variance numerator)
+            newRdd <- lapply(x, function(x) { c(x, 1, 0.0) })
+            var <- reduce(newRdd, function(x, y) mergeStats(x, y, variance = TRUE))
+            var[3] / var[2]
           })
 
 #' Applies a function to all elements in an RDD, and force evaluation.

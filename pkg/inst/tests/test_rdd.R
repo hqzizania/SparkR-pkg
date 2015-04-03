@@ -264,14 +264,19 @@ test_that("maximum() on RDDs", {
   expect_equal(max, 10)
 })
 
+test_that("minimum() on RDDs", {
+  min <- minimum(rdd)
+  expect_equal(min, 1)
+})
+
 test_that("meanStats() on RDDs", {
   mean <- meanStats(rdd)
   expect_equal(mean, 5.5)
 })
 
-test_that("minimum() on RDDs", {
-  min <- minimum(rdd)
-  expect_equal(min, 1)
+test_that("variance() on RDDs", {
+  var <- variance(rdd)
+  expect_equal(var, 8.25)
 })
 
 test_that("keyBy on RDDs", {

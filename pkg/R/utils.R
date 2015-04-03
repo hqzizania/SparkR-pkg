@@ -419,3 +419,21 @@ cleanClosure <- function(func, checkedFuncs = new.env()) {
   }
   func
 }
+
+# Merge another StatCounter into this one, adding up the internal statistics.
+mergeStats <- function(x, y, variance = FALSE) {
+  delta <- y[1] - x[1] 
+
+  if (y[2] * 10 < x[2]) 
+    x[1] <- x[1] + (delta * y[2]) / (x[2] + y[2])
+  else if (x[2] * 10 < y[2]) 
+    x[1] <- y[1] - (delta * x[2]) / (x[2] + y[2])
+  else
+    x[1] <- (x[1] * x[2] + y[1] * y[2]) / (x[2] + y[2])
+
+  if(!variance)
+    c(x[1], x[2] + y[2])
+  else
+    c(x[1], x[2] + y[2], 
+      x[3] + y[3] + (delta * delta * x[2] * y[2]) / (x[2] + y[2]))
+}
