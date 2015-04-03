@@ -276,7 +276,12 @@ test_that("meanStats() on RDDs", {
 
 test_that("variance() on RDDs", {
   var <- variance(rdd)
-  expect_equal(var, 8.25)
+  expect_true(var - 8.25 <= 1e-5)
+})
+
+test_that("stdev() on RDDs", {
+  var <- stdev(rdd)
+  expect_true(var - 2.872281 <= 1e-5)
 })
 
 test_that("keyBy on RDDs", {
