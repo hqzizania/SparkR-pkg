@@ -105,6 +105,10 @@ setGeneric("meanStats", function(x) { standardGeneric("meanStats") })
 #' @export
 setGeneric("variance", function(x) { standardGeneric("variance") })
 
+#' @rdname stdev
+#' @export
+setGeneric("stdev", function(x) { standardGeneric("stdev") })
+
 #' @rdname foreach
 #' @export
 setGeneric("foreach", function(x, func) { standardGeneric("foreach") })

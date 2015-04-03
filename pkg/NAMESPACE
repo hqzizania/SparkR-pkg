@@ -58,6 +58,7 @@ exportMethods(
               "saveAsObjectFile",
               "sortBy",
               "sortByKey",
+              "stdev",
               "take",
               "takeOrdered",
               "takeSample",

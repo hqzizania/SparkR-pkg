@@ -674,7 +674,28 @@ setMethod("variance",
             # build a new RDD which's elements are StatCounters c(mean, count, variance numerator)
             newRdd <- lapply(x, function(x) { c(x, 1, 0.0) })
             var <- reduce(newRdd, function(x, y) mergeStats(x, y, variance = TRUE))
-            var[3] / var[2]
+
+            if (var[2] == 0)
+              NaN
+            else
+              var[3] / var[2]
+          })
+
+#' Get the standard deviation of the values of an RDD's elements.
+#'
+#' @param x The RDD to get the standard deviation of the values of elements from
+#' @examples
+#'\dontrun{
+#' sc <- sparkR.init()
+#' rdd <- parallelize(sc, 1:3)
+#' stdev(rdd) # 0.8164966
+#'}
+#' @rdname stdev
+#' @aliases stdev,RDD
+setMethod("stdev",
+          signature(x = "RDD"),
+          function(x) {
+            sqrt(variance(x))
           })
 
 #' Applies a function to all elements in an RDD, and force evaluation.
